@@ -15,7 +15,8 @@ logging.basicConfig(
 app = FastAPI(
     title="Eventual API",
     description="API para la aplicación Eventual - Gestión de eventos con geolocalización",
-    version="1.0.0"
+    version="1.0.0",
+    root_path="/api"  # Para Vercel deployment
 )
 
 # Inicializar DB en el startup (compatible con serverless)
