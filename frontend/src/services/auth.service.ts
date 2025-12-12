@@ -1,6 +1,10 @@
 // Servicio de autenticación para Eventual
 import type { User } from '@/interfaces/eventual';
 
+// En desarrollo (Docker): usa VITE_API_URL del .env (http://localhost:8000)
+// En producción (Vercel): usa rutas relativas con prefijo /api
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
+
 class AuthService {
   private token: string | null = null;
 
@@ -10,7 +14,7 @@ class AuthService {
   }
 
   loginWithGoogle(): void {
-    window.location.href = `${window.location.origin}/api/auth/login/google`;
+    window.location.href = `${API_BASE}/auth/login/google`;
   }
 
   /**
@@ -34,7 +38,7 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       // Llamar al endpoint de logout (opcional, ya que JWT es stateless)
-      await fetch(`/api/auth/logout`, {
+      await fetch(`${API_BASE}/auth/logout`, {
         method: 'POST',
         headers: this.getAuthHeaders(),
       });
@@ -56,7 +60,7 @@ class AuthService {
     }
 
     try {
-      const response = await fetch(`/api/auth/me`, {
+      const response = await fetch(`${API_BASE}/auth/me`, {
         headers: this.getAuthHeaders(),
       });
 
