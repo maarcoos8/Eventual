@@ -2,6 +2,7 @@
 import type { Evento, EventoCreate, EventoUpdate } from '@/interfaces/eventual';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_PREFIX = import.meta.env.PROD ? '/api' : '';
 
 class EventoService {
   private getAuthHeaders(): HeadersInit {
@@ -17,7 +18,7 @@ class EventoService {
    */
   async buscarEventosCercanos(direccion: string): Promise<{ eventos: Evento[]; coordenadas_busqueda: { lat: number; lon: number } }> {
     const response = await fetch(
-      `${API_URL}/eventos/buscar?direccion=${encodeURIComponent(direccion)}`
+      `${API_URL}${API_PREFIX}/eventos/buscar?direccion=${encodeURIComponent(direccion)}`
     );
     if (!response.ok) {
       throw new Error('Error al buscar eventos');
@@ -29,7 +30,7 @@ class EventoService {
    * Obtener todos los eventos
    */
   async obtenerTodos(): Promise<Evento[]> {
-    const response = await fetch(`${API_URL}/eventos/`);
+    const response = await fetch(`${API_URL}${API_PREFIX}/eventos/`);
     if (!response.ok) {
       throw new Error('Error al obtener eventos');
     }
@@ -40,7 +41,7 @@ class EventoService {
    * Obtener un evento por ID
    */
   async obtenerPorId(id: string): Promise<Evento> {
-    const response = await fetch(`${API_URL}/eventos/${id}`);
+    const response = await fetch(`${API_URL}${API_PREFIX}/eventos/${id}`);
     if (!response.ok) {
       throw new Error('Error al obtener evento');
     }
@@ -51,7 +52,7 @@ class EventoService {
    * Obtener eventos del usuario actual
    */
   async obtenerMisEventos(): Promise<Evento[]> {
-    const response = await fetch(`${API_URL}/eventos/mis-eventos`, {
+    const response = await fetch(`${API_URL}${API_PREFIX}/eventos/mis-eventos`, {
       headers: this.getAuthHeaders(),
     });
     if (!response.ok) {
@@ -64,7 +65,7 @@ class EventoService {
    * Crear un nuevo evento
    */
   async crear(evento: EventoCreate): Promise<Evento> {
-    const response = await fetch(`${API_URL}/eventos/`, {
+    const response = await fetch(`${API_URL}${API_PREFIX}/eventos/`, {
       method: 'POST',
       headers: this.getAuthHeaders(),
       body: JSON.stringify(evento),
@@ -80,7 +81,7 @@ class EventoService {
    * Actualizar un evento existente
    */
   async actualizar(id: string, evento: EventoUpdate): Promise<Evento> {
-    const response = await fetch(`${API_URL}/eventos/${id}`, {
+    const response = await fetch(`${API_URL}${API_PREFIX}/eventos/${id}`, {
       method: 'PUT',
       headers: this.getAuthHeaders(),
       body: JSON.stringify(evento),
@@ -96,7 +97,7 @@ class EventoService {
    * Eliminar un evento
    */
   async eliminar(id: string): Promise<void> {
-    const response = await fetch(`${API_URL}/eventos/${id}`, {
+    const response = await fetch(`${API_URL}${API_PREFIX}/eventos/${id}`, {
       method: 'DELETE',
       headers: this.getAuthHeaders(),
     });
@@ -114,7 +115,7 @@ class EventoService {
     formData.append('file', file);
 
     const token = localStorage.getItem('auth_token');
-    const response = await fetch(`${API_URL}/eventos/upload-image`, {
+    const response = await fetch(`${API_URL}${API_PREFIX}/eventos/upload-image`, {
       method: 'POST',
       headers: {
         ...(token && { Authorization: `Bearer ${token}` }),

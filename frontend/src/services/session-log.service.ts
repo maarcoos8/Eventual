@@ -2,6 +2,7 @@
 import type { SessionLog } from '@/interfaces/eventual';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_PREFIX = import.meta.env.PROD ? '/api' : '';
 
 class SessionLogService {
   private getAuthHeaders(): HeadersInit {
@@ -16,7 +17,7 @@ class SessionLogService {
    * Obtener todos los logs de sesión
    */
   async obtenerLogs(): Promise<SessionLog[]> {
-    const response = await fetch(`${API_URL}/session-logs/`, {
+    const response = await fetch(`${API_URL}${API_PREFIX}/session-logs/`, {
       headers: this.getAuthHeaders(),
     });
     if (!response.ok) {
