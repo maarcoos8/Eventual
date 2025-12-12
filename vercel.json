@@ -1,0 +1,65 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/eventos/(.*)",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/auth/login/google",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/auth/callback/google",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/auth/logout",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/auth/me",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/session-logs",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/docs",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/openapi.json",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/frontend/assets/"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|json|woff|woff2|ttf|eot))",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "dest": "/frontend/"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/index.html"
+    }
+  ]
+}
