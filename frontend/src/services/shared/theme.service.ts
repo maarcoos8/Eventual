@@ -12,7 +12,7 @@ class ThemeService {
         if (storedTheme) {
             this.setTheme(storedTheme);
         } else {
-            this.setTheme('system');
+            this.setTheme('light');
         }
     }
 
