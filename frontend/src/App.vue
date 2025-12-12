@@ -10,12 +10,15 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { useAuthStore } from '@/stores/auth';
 import ThemeService from '@/services/shared/theme.service';
 
-ThemeService.initializeTheme();
-
 const authStore = useAuthStore();
 
-// Cargar usuario al iniciar la aplicación si hay token
+// Inicializar tema y cargar usuario al iniciar la aplicación
 onMounted(async () => {
+  // FORZAR tema claro siempre (eliminar cualquier configuración anterior)
+  localStorage.removeItem('selected-theme');
+  ThemeService.setTheme('light');
+  console.log('Tema forzado a claro');
+  
   await authStore.loadUser();
 });
 </script>
