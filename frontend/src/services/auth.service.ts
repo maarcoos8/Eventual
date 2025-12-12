@@ -1,9 +1,6 @@
 // Servicio de autenticación para Eventual
 import type { User } from '@/interfaces/eventual';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-const API_PREFIX = import.meta.env.PROD ? '/api' : '';
-
 class AuthService {
   private token: string | null = null;
 
@@ -12,11 +9,8 @@ class AuthService {
     this.token = localStorage.getItem('auth_token');
   }
 
-  /**
-   * Redirige al usuario a Google OAuth
-   */
   loginWithGoogle(): void {
-    window.location.href = `${API_URL}${API_PREFIX}/auth/login/google`;
+    window.location.href = `${window.location.origin}/api/auth/login/google`;
   }
 
   /**
@@ -40,7 +34,7 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       // Llamar al endpoint de logout (opcional, ya que JWT es stateless)
-      await fetch(`${API_URL}${API_PREFIX}/auth/logout`, {
+      await fetch(`/api/auth/logout`, {
         method: 'POST',
         headers: this.getAuthHeaders(),
       });
@@ -62,7 +56,7 @@ class AuthService {
     }
 
     try {
-      const response = await fetch(`${API_URL}${API_PREFIX}/auth/me`, {
+      const response = await fetch(`/api/auth/me`, {
         headers: this.getAuthHeaders(),
       });
 
